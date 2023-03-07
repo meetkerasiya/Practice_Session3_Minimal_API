@@ -13,6 +13,7 @@ namespace PracticeSession3_With_Minimal_API.MinimalAPIs
             app.MapGet("/students", GetAllStudents);
             app.MapGet("/students/{id}", GetStudent).WithName("Get");
             app.MapPost("/students", AddStudent);
+            app.MapPut("/students/{id}", UpdateStudent);
         }
 
         private static async  Task<IResult>  GetAllStudents([FromServices] IDataRepository<Student> dataRepository)
@@ -66,6 +67,26 @@ namespace PracticeSession3_With_Minimal_API.MinimalAPIs
                 return TypedResults.CreatedAtRoute(routeName:"Get",
                     routeValues: new { Id = student.StudentID },
                     value: student);
+            }
+            catch (Exception ex)
+            {
+                return TypedResults.Problem($"Internal server error: {ex}");
+            }
+        }
+
+        private static async Task<IResult> UpdateStudent([FromBody] Student student, [FromServices] IDataRepository<Student> dataRepository)
+        {
+            try
+            {
+                if (student == null)
+                {
+                    return TypedResults.BadRequest("Student is null.");
+                }
+
+
+
+                dataRepository.Update(student);
+                return TypedResults.NoContent();
             }
             catch (Exception ex)
             {
