@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PracticeSession3_With_Minimal_API.props" />
+</Project>
